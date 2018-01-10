@@ -45,14 +45,14 @@ class FG_eval {
       for (int t = 0; t < N; t++) {
           fg[0] += CppAD::pow(vars[cte_start + t], 2);
           fg[0] += CppAD::pow(vars[epsi_start + t], 2);
-          fg[0] += CppAD::pow(vars[v_start + t] - 12, 2);
+          fg[0] += CppAD::pow(vars[v_start + t] - 30, 2);
       }
       for (int t = 0; t < N - 1; t++) {
           fg[0] += CppAD::pow(vars[delta_start + t], 2);
           fg[0] += CppAD::pow(vars[a_start + t], 2);
       }
       for (int t = 0; t < N - 2; t++) {
-          fg[0] += 20000 * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
+          fg[0] += 10000 * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
           fg[0] += CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
       }
       fg[1 + x_start] = vars[x_start];
@@ -209,5 +209,10 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   //
   // {...} is shorthand for creating a vector, so auto x1 = {1.0,2.0}
   // creates a 2 element double vector.
-  return {solution.x[1 + x_start], solution.x[1 + y_start], solution.x[1 + psi_start], solution.x[1 + v_start], solution.x[1 + cte_start], solution.x[1 + epsi_start], solution.x[delta_start], solution.x[a_start]};
+  return {solution.x[1 + x_start],solution.x[2 + x_start],solution.x[3 + x_start],solution.x[4 + x_start],
+      solution.x[5 + x_start],solution.x[6 + x_start],solution.x[7 + x_start],solution.x[8 + x_start],solution.x[9 + x_start],
+     solution.x[1 + y_start],solution.x[2 + y_start],solution.x[3 + y_start],solution.x[4 + y_start],solution.x[5 + y_start],
+solution.x[6 + y_start],solution.x[7 + y_start], solution.x[8 + y_start],solution.x[9 + y_start],
+      //solution.x[1 + psi_start], solution.x[1 + v_start], solution.x[1 + cte_start], solution.x[1 + epsi_start],
+      solution.x[delta_start], solution.x[a_start]};
 }

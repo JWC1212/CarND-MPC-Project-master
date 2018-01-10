@@ -132,7 +132,7 @@ int main() {
           double y = 0;
           double cte = coeffs[0];
           double epsi = -atan(coeffs[1]);
-          
+          psi = 0;
           Eigen::VectorXd state(8);
           state << x, y, psi, v, cte, epsi, -delta, a;
         
@@ -146,8 +146,8 @@ int main() {
           //std::vector<double> a_vals = {};
             
           auto mpc_result = mpc.Solve(state, coeffs);
-          steer_value = mpc_result[6];
-          throttle_value = mpc_result[7];
+          steer_value = mpc_result[18];
+          throttle_value = mpc_result[19];
             
           steer_value = -steer_value / deg2rad(25);
           
@@ -163,7 +163,10 @@ int main() {
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Green line
-
+            for (int i = 0; i < 9; i++ ) {
+                mpc_x_vals.push_back(mpc_result[i]);
+                mpc_y_vals.push_back(mpc_result[i+9]);
+            }
           msgJson["mpc_x"] = mpc_x_vals;
           msgJson["mpc_y"] = mpc_y_vals;
 
@@ -173,9 +176,12 @@ int main() {
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Yellow line
-
-          next_x_vals = {6.0, 5.0, 4.0, 3.0, 2.0, 1.0};
-          next_y_vals = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+            for (int i = 0; i < transformed_x.size(); i++) {
+                next_x_vals.push_back(transformed_x[i]);
+                next_y_vals.push_back(transformed_y[i]);
+            }
+          //next_x_vals = {6.0, 5.0, 4.0, 3.0, 2.0, 1.0};
+          //next_y_vals = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
 
